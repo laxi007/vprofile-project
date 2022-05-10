@@ -48,7 +48,14 @@ agent any
             }
         }
 
+       stage('CODE ANALYSIS with SONARQUBE') {
 
+           steps{
+                withSonarQubeEnv('sonar-pro'){
+           
+               sh ' mvn clean install -f webapp/pom.xml'
+}
+}
        
 
         
