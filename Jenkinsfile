@@ -1,19 +1,19 @@
 pipeline {
 
-    agent any
-/*
-	tools {
-        maven "maven3"
-    }
-*/
+agent any
+
     environment {
-        registry = "imranvisualpath/vproappdock"
-        registryCredential = 'dockerhub'
+        registry = "laxi101/docker"
+        registryCredential = 'docker101'
     }
 
     stages{
-
-        stage('BUILD'){
+       stage('Fetch Code') {
+            steps {
+                git branch: 'cicd-kube', url: 'https://github.com/laxi007/vprofile-project.git'
+            }
+        }
+      stage('BUILD'){
             steps {
                 sh 'mvn clean install -DskipTests'
             }
@@ -27,13 +27,13 @@ pipeline {
 
         stage('UNIT TEST'){
             steps {
-                sh 'mvn test'
+                sh 'mvn test -DskipTests'
             }
         }
 
         stage('INTEGRATION TEST'){
             steps {
-                sh 'mvn verify -DskipUnitTests'
+                sh 'mvn verify -DskipTests'
             }
         }
 
@@ -49,7 +49,11 @@ pipeline {
         }
 
 
-        stage('Building image') {
+       
+
+        
+
+stage('Building image') {
             steps{
               script {
                 dockerImage = docker.build registry + ":$BUILD_NUMBER"
@@ -74,37 +78,14 @@ pipeline {
           }
         }
 
-        stage('CODE ANALYSIS with SONARQUBE') {
-
-            environment {
-                scannerHome = tool 'mysonarscanner4'
-            }
-
+stage('Kubernetes Deploy') {
+	  agent { label 'kops' }
             steps {
-                withSonarQubeEnv('sonar-pro') {
-                    sh '''${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=vprofile \
-                   -Dsonar.projectName=vprofile-repo \
-                   -Dsonar.projectVersion=1.0 \
-                   -Dsonar.sources=src/ \
-                   -Dsonar.java.binaries=target/test-classes/com/visualpathit/account/controllerTest/ \
-                   -Dsonar.junit.reportsPath=target/surefire-reports/ \
-                   -Dsonar.jacoco.reportsPath=target/jacoco.exec \
-                   -Dsonar.java.checkstyle.reportPaths=target/checkstyle-result.xml'''
-                }
-
-                timeout(time: 10, unit: 'MINUTES') {
-                    waitForQualityGate abortPipeline: true
-                }
+                    sh "helm upgrade --install --force vprofile-stack helm/vprofilecharts --set appimage=${registry}:${BUILD_NUMBER} --namespace prod"
             }
         }
-        stage('Kubernetes Deploy') {
-	  agent { label 'KOPS' }
-            steps {
-                    sh "helm upgrade --install --force vproifle-stack helm/vprofilecharts --set appimage=${registry}:${BUILD_NUMBER} --namespace prod"
-            }
-        }
-
     }
+
 
 
 }
