@@ -3,7 +3,7 @@ pipeline {
 agent any
 
     environment {
-        registry = "laxi101/docker"
+        registry = "laxi101/docker1"
         registryCredential = 'docker101'
     }
 
