@@ -2,7 +2,7 @@ pipeline{
     agent any
     
 
-        
+    stages{
         stage('BUILD'){
             steps {
                 sh 'mvn clean install -DskipTests'
@@ -14,7 +14,7 @@ pipeline{
                 }
             }
         }
-        stages{
+        
         stage('SAST'){
             steps{
                 withSonarQubeEnv('sonar-pro'){
