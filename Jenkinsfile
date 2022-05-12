@@ -24,7 +24,7 @@ agent any
     
       stage('BUILD'){
             steps {
-                sh 'mvn clean install -DskipTests'
+                sh 'mvn clean install'
             }
             post {
                 success {
@@ -42,7 +42,7 @@ agent any
 
         stage('INTEGRATION TEST'){
             steps {
-                sh 'mvn verify -DskipUnitTests'
+                sh 'mvn verify '
             }
         }
 
@@ -56,7 +56,15 @@ agent any
                 }
             }
         }
-
+	    
+   stage('SAST'){
+            steps{
+                withSonarQubeEnv('sonar-pro'){
+                sh 'mvn sonar:sonar'
+                sh 'cat target/sonar/report-task.txt'
+            }
+        }
+ }
    stage('CODE ANALYSIS with SONARQUBE') {
 
             environment {
