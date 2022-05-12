@@ -18,7 +18,7 @@ agent any
     
       stage('BUILD'){
             steps {
-                sh 'mvn clean install -DskipTests'
+                sh 'mvn clean install '
             }
             post {
                 success {
@@ -36,7 +36,7 @@ agent any
 
         stage('INTEGRATION TEST'){
             steps {
-                sh 'mvn verify -DskipUnitTests'
+                sh 'mvn verify '
             }
         }
 
