@@ -1,7 +1,20 @@
 pipeline{
     agent any
     
-    stages{
+
+        
+        stage('BUILD'){
+            steps {
+                sh 'mvn clean install -DskipTests'
+            }
+            post {
+                success {
+                    echo 'Now Archiving...'
+                    archiveArtifacts artifacts: '**/target/*.war'
+                }
+            }
+        }
+        stages{
         stage('SAST'){
             steps{
                 withSonarQubeEnv('sonar-pro'){
@@ -9,6 +22,6 @@ pipeline{
                 sh 'cat target/sonar/report-task.txt'
             }
         }
-    }
+ }
 }
 }
