@@ -13,7 +13,13 @@ agent any
                 git branch: 'cicd-kube', url: 'https://github.com/laxi007/vprofile-project.git'
             }
         }
-	    
+	 
+	    stage('Check-Git-Secrets'){
+steps{
+sh 'rm trufflehog || true'
+sh 'docker run gesellix/trufflehog --json https://github.com/laxi007/vprofile-project.git > trufflehog'
+}
+}
        
     
       stage('BUILD'){
