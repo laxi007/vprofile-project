@@ -24,7 +24,7 @@ sh 'docker run gesellix/trufflehog --json https://github.com/laxi007/vprofile-pr
     
       stage('BUILD'){
             steps {
-                sh 'mvn clean install '
+                sh 'mvn clean install -DskipTests '
             }
             post {
                 success {
@@ -36,13 +36,13 @@ sh 'docker run gesellix/trufflehog --json https://github.com/laxi007/vprofile-pr
 
         stage('UNIT TEST'){
             steps {
-                sh 'mvn test'
+                sh 'mvn test '
             }
         }
 
         stage('INTEGRATION TEST'){
             steps {
-                sh 'mvn verify '
+                sh 'mvn verify -DskipUnitTests '
             }
         }
 
