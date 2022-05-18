@@ -5,14 +5,14 @@
 replicaCount: 1
 
 image:
-  repository: "ec2-184-72-64-204.compute-1.amazonaws.com:8085"
+  repository: "ec2-3-80-31-183.compute-1.amazonaws.com:8085"
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
 
 
 imageCredentials:
-  registry: "ec2-184-72-64-204.compute-1.amazonaws.com:8085"
+  registry: "ec2-3-80-31-183.compute-1.amazonaws.com:8085"
   username: "admin"
   password: "admin"
 nameOverride: ""
