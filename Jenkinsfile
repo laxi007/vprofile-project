@@ -46,9 +46,14 @@ stage('Building image') {
           }
         }
 	    
-	    stage('pull docker image') {
+	 stage('Pull Image') {
           steps{
-            sh "docker pull $registry:$BUILD_NUMBER"
+            script {
+              docker.withRegistry( 'http://'+registry, registryCredential ) {
+                dockerImage.pull("$BUILD_NUMBER")
+                
+              }
+            }
           }
         }
 
