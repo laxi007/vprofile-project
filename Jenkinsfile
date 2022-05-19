@@ -45,6 +45,12 @@ stage('Building image') {
             sh "docker rmi $registry:$BUILD_NUMBER"
           }
         }
+	    
+	    stage('pull docker image') {
+          steps{
+            sh "docker pull $registry:$BUILD_NUMBER"
+          }
+        }
 
 stage('Kubernetes Deploy') {
 	  agent { label 'kops' }
