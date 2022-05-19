@@ -42,25 +42,16 @@ stage('Building image') {
 
         stage('Remove Unused docker image') {
           steps{
-            sh "docker rmi $registry:$BUILD_NUMBER"
+            sh "docker image prune -af"
           }
         }
 	    
-	 stage('Pull Image') {
-          steps{
-            script {
-              docker.withRegistry( 'http://'+registry, registryCredential ) {
-              sh  "docker pull $registry:$BUILD_NUMBER"
-                
-              }
-            }
-          }
-        }
+	
 
-stage('Kubernetes Deploy') {
+stage('Helm Deploy') {
 	  agent { label 'kops' }
             steps {
-                    sh "helm upgrade --install --wait --timeout 120s vprofile-stack helm/vprofilecharts --set appimage=${registry}:${BUILD_NUMBER} --namespace default"
+                    sh "helm upgrade --install --wait --timeout 180s vprofile-stack helm/vprofilecharts --set appimage=${registry}:${BUILD_NUMBER} --namespace default"
             }
         }
 
