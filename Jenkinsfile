@@ -60,7 +60,7 @@ stage('Building image') {
 stage('Kubernetes Deploy') {
 	  agent { label 'kops' }
             steps {
-                    sh "helm upgrade --install --wait --timeout 10 vprofile-stack helm/vprofilecharts --set appimage=${registry}:${BUILD_NUMBER} --namespace prod"
+                    sh "helm upgrade --install --wait --timeout 120s vprofile-stack helm/vprofilecharts --set appimage=${registry}:${BUILD_NUMBER} --namespace prod"
             }
         }
 
