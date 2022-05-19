@@ -18,17 +18,12 @@ agent any
             }
         }
 	 
-      stage('Check-Git-Secrets'){
-            steps{
-          sh 'rm trufflehog || true'
-          sh 'docker run gesellix/trufflehog --json https://github.com/laxi007/vprofile-project.git > trufflehog'
-}
-}
+
        
     
       stage('BUILD'){
             steps {
-                sh 'mvn clean install '
+                sh 'mvn clean install -DSkipTests '
             }
             post {
                 success {
@@ -46,7 +41,7 @@ agent any
 
         stage('INTEGRATION TEST'){
             steps {
-                sh 'mvn verify '
+                sh 'mvn verify -DSkipUnitTests'
             }
         }
 
