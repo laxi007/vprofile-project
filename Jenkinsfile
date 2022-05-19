@@ -51,8 +51,12 @@ stage('Building image') {
 stage('Helm Deploy') {
 	  agent { label 'kops' }
             steps {
-                    sh "helm upgrade --install --wait --timeout 180s vprofile-stack helm/vprofilecharts --set appimage=${registry}:${BUILD_NUMBER} --namespace default"
-            }
+                    
+		 sh "helm upgrade --install --wait --timeout 180s vprofile-stack helm/vprofilecharts --set appimage=${registry}:${BUILD_NUMBER} --namespace default"
+		 sh "kubectl get svc"
+
+            
+	    }
         }
 
 
