@@ -50,7 +50,7 @@ stage('Building image') {
           steps{
             script {
               docker.withRegistry( 'http://'+registry, registryCredential ) {
-                dockerImage.pull("$BUILD_NUMBER")
+                docker pull $registry:$BUILD_NUMBER"
                 
               }
             }
