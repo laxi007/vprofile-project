@@ -10,8 +10,16 @@ agent any
         registryCredential = "nexusserverlogin" 
        
     }
-
-    stages{
+	    
+	 stages{
+	
+	stage('Check-Git-Secrets'){
+          steps{
+          sh 'rm trufflehog || true'
+          sh 'docker run gesellix/trufflehog --json https://github.com/laxi007/vprofile-project.git > trufflehog'
+}
+}
+   
        stage('Fetch Code') {
             steps {
                 git branch: 'cicd-kube', url: 'https://github.com/laxi007/vprofile-project.git'
